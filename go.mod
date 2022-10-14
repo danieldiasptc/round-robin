@@ -1,3 +1,3 @@
-module github.com/hlts2/round-robin
+module github.com/danieldiasptc/round-robin
 
 go 1.13
