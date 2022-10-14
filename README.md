@@ -1,6 +1,9 @@
 # round-robin
 round-robin is balancing algorithm written in golang
 
+## Forked
+Forked from https://github.com/hlts2/round-robin to work with strings instead of URLs
+
 ## Installation
 
 ```shell
@@ -11,18 +14,18 @@ go get github.com/hlts2/round-robin
 
 ```go
 rr, _ := roundrobin.New(
-    &url.URL{Host: "192.168.33.10"},
-    &url.URL{Host: "192.168.33.11"},
-    &url.URL{Host: "192.168.33.12"},
-    &url.URL{Host: "192.168.33.13"},
+    "192.168.33.10",
+    "192.168.33.11",
+    "192.168.33.12",
+    "192.168.33.13",
 )
 
-rr.Next() // {Host: "192.168.33.10"}
-rr.Next() // {Host: "192.168.33.11"}
-rr.Next() // {Host: "192.168.33.12"}
-rr.Next() // {Host: "192.168.33.13"}
-rr.Next() // {Host: "192.168.33.10"}
-rr.Next() // {Host: "192.168.33.11"}
+rr.Next() // "192.168.33.10"
+rr.Next() // "192.168.33.11"
+rr.Next() // "192.168.33.12"
+rr.Next() // "192.168.33.13"
+rr.Next() // "192.168.33.10"
+rr.Next() // "192.168.33.11"
 ```
 ## Author
 [hlts2](https://github.com/hlts2)

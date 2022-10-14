@@ -2,36 +2,34 @@ package roundrobin
 
 import (
 	"errors"
-	"net/url"
 	"sync/atomic"
 )
 
-// ErrServersNotExists is the error that servers dose not exists
-var ErrServersNotExists = errors.New("servers dose not exist")
+var ErrEmptyValues = errors.New("no values were provided")
 
 // RoundRobin is an interface for representing round-robin balancing.
 type RoundRobin interface {
-	Next() *url.URL
+	Next() string
 }
 
 type roundrobin struct {
-	urls []*url.URL
-	next uint32
+	values []string
+	next   uint32
 }
 
 // New returns RoundRobin implementation(*roundrobin).
-func New(urls ...*url.URL) (RoundRobin, error) {
-	if len(urls) == 0 {
-		return nil, ErrServersNotExists
+func New(values ...string) (RoundRobin, error) {
+	if len(values) == 0 {
+		return nil, ErrEmptyValues
 	}
 
 	return &roundrobin{
-		urls: urls,
+		values: values,
 	}, nil
 }
 
-// Next returns next address
-func (r *roundrobin) Next() *url.URL {
+// Next returns next value
+func (r *roundrobin) Next() string {
 	n := atomic.AddUint32(&r.next, 1)
-	return r.urls[(int(n)-1)%len(r.urls)]
+	return r.values[(int(n)-1)%len(r.values)]
 }

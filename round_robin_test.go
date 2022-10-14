@@ -2,7 +2,6 @@ package roundrobin
 
 import (
 	"fmt"
-	"net/url"
 	"reflect"
 	"sync"
 	"testing"
@@ -10,40 +9,40 @@ import (
 
 func TestRoundRobin(t *testing.T) {
 	tests := []struct {
-		urls     []*url.URL
+		values   []string
 		iserr    bool
 		expected []string
-		want     []*url.URL
+		want     []string
 	}{
 		{
-			urls: []*url.URL{
-				{Host: "192.168.33.10"},
-				{Host: "192.168.33.11"},
-				{Host: "192.168.33.12"},
+			values: []string{
+				"192.168.33.10",
+				"192.168.33.11",
+				"192.168.33.12",
 			},
 			iserr: false,
-			want: []*url.URL{
-				{Host: "192.168.33.10"},
-				{Host: "192.168.33.11"},
-				{Host: "192.168.33.12"},
-				{Host: "192.168.33.10"},
+			want: []string{
+				"192.168.33.10",
+				"192.168.33.11",
+				"192.168.33.12",
+				"192.168.33.10",
 			},
 		},
 		{
-			urls:  []*url.URL{},
-			iserr: true,
-			want:  []*url.URL{},
+			values: []string{},
+			iserr:  true,
+			want:   []string{},
 		},
 	}
 
 	for i, test := range tests {
-		rr, err := New(test.urls...)
+		rr, err := New(test.values...)
 
 		if got, want := !(err == nil), test.iserr; got != want {
 			t.Errorf("tests[%d] - RoundRobin iserr is wrong. want: %v, but got: %v", i, test.want, got)
 		}
 
-		gots := make([]*url.URL, 0, len(test.want))
+		gots := make([]string, 0, len(test.want))
 		for j := 0; j < len(test.want); j++ {
 			gots = append(gots, rr.Next())
 		}
@@ -55,17 +54,17 @@ func TestRoundRobin(t *testing.T) {
 }
 
 func BenchmarkRoundRobinSync(b *testing.B) {
-	resources := []*url.URL{
-		{Host: "127.0.0.1"},
-		{Host: "127.0.0.2"},
-		{Host: "127.0.0.3"},
-		{Host: "127.0.0.4"},
-		{Host: "127.0.0.5"},
-		{Host: "127.0.0.6"},
-		{Host: "127.0.0.7"},
-		{Host: "127.0.0.8"},
-		{Host: "127.0.0.9"},
-		{Host: "127.0.0.10"},
+	resources := []string{
+		"127.0.0.1",
+		"127.0.0.2",
+		"127.0.0.3",
+		"127.0.0.4",
+		"127.0.0.5",
+		"127.0.0.6",
+		"127.0.0.7",
+		"127.0.0.8",
+		"127.0.0.9",
+		"127.0.0.10",
 	}
 
 	for i := 1; i < len(resources)+1; i++ {
@@ -86,17 +85,17 @@ func BenchmarkRoundRobinSync(b *testing.B) {
 }
 
 func BenchmarkRoundRobinASync(b *testing.B) {
-	resources := []*url.URL{
-		{Host: "127.0.0.1"},
-		{Host: "127.0.0.2"},
-		{Host: "127.0.0.3"},
-		{Host: "127.0.0.4"},
-		{Host: "127.0.0.5"},
-		{Host: "127.0.0.6"},
-		{Host: "127.0.0.7"},
-		{Host: "127.0.0.8"},
-		{Host: "127.0.0.9"},
-		{Host: "127.0.0.10"},
+	resources := []string{
+		"127.0.0.1",
+		"127.0.0.2",
+		"127.0.0.3",
+		"127.0.0.4",
+		"127.0.0.5",
+		"127.0.0.6",
+		"127.0.0.7",
+		"127.0.0.8",
+		"127.0.0.9",
+		"127.0.0.10",
 	}
 
 	for i := 1; i < len(resources)+1; i++ {
